@@ -8,8 +8,8 @@ int main(int argc, char const *argv[])
 
 	FILE *fp;
 	arvB *T;
-	int opcao,pos_reg;
-	char *chave,*t1, *t2, *t3, *t4, *t5, *t6;
+	int opcao,pos_reg,PRR=0;
+	char *chave,*aux, c;
 	/* Verificação das condições necessárias para funcionamento correto do programa */
 	if (strcmp(argv[2],"-r")==0 && (atoi(argv[3]) == 1 || atoi(argv[3]) == 2))
 	{
@@ -23,14 +23,35 @@ int main(int argc, char const *argv[])
 			}
 		} else {
 			print_uso(argv);
-			return 0;
-		}
-	} else {
+			return 0; 
+		} 
+	} else { 
 		print_uso(argv);
 		return 0;
 	}
-	/* Alocação, Indexação e inicialização da arvore B */
+	/* Alocação, Indexação e Inicialização da arvore B */
 	T = cria_arvB(T);
+	
+	if(atoi(argv[3]) == 1) 
+	{
+		chave = (char *)malloc(7*sizeof(char));	
+		do
+		{
+			fread(chave,1,7,fp);	
+			PRR++;
+			insere_arvB(T,chave,PRR);
+			for(int j=0;j<10;){		
+				fscanf(fp,"%c",&c);
+				if(c == ';')j++;
+			}
+			fscanf(fp,"%s",aux);
+			c = fgetc(fp);
+			c = fgetc(fp);
+		}while(!feof(fp));
+	
+	}
+	/* TESTE COM O ALFABETO */
+	/*
 	insere_arvB(T,"C",1);
 	insere_arvB(T,"D",2);
 	insere_arvB(T,"S",3);
@@ -57,7 +78,7 @@ int main(int argc, char const *argv[])
 	insere_arvB(T,"F",5);
 	insere_arvB(T,"X",5);
 	insere_arvB(T,"V",5);
-
+	*/
 	/* MENU DE OPÇÕES */
 	/*do{
 		printf("**************************************\n");
@@ -89,7 +110,8 @@ int main(int argc, char const *argv[])
 		default:
 	}while(opcao != 4);
 	*/
-	fclose(fp);
+	//free(chave);
+	//fclose(fp);
 	
 	return 0;
 }

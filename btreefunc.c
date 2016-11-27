@@ -20,15 +20,16 @@ void print_uso(char const *argv[])
 /* FUNÇÃO DE CRIAÇÃO DE CADA NÓ DA ÁRVORE B */
 no* cria_no(no* x)
 {
-	x = (no *)malloc(sizeof(no));
+	x = (no *)calloc(1,sizeof(no));
 	for (int i = 0; i < 4; ++i) x->posicao[i] = -1;
+	
 	return x;
 }
 /* FUNÇÃO DE CRIAÇÃO DA ESTRUTURA PRINCIPAL DA ÁRVORE B*/
 arvB* cria_arvB(arvB *T)
 {
 	no* x;
-	T = (arvB *)malloc(sizeof(arvB));
+	T = (arvB *)calloc(1,sizeof(arvB));
 	x = cria_no(x);
 	x->folha = TRUE;
 	x->num = 0;
@@ -86,35 +87,35 @@ void insere_arvB(arvB *T, char *k, int posicao)
 /* FUNÇÃO DE INSERÇÃO DE CHAVE QUANDO O NÓ NÃO ESTÁ CHEIO */
 void insereNC_arvB(no* x, char *k, int posicao)
 {
+	char *aux = k;
 	int i;
 	i = x->num;
 	if(x->folha == TRUE)
 	{
 		if(i > 0){
-			while(i > 0 && strcmp(k,x->chaves[i-1])<0)
+			while(i > 0 && strcmp(aux,x->chaves[i-1])<0)
 			{
 				x->chaves[i] = x->chaves[i-1];
 				i--;
 			}
 			x->posicao[i] = posicao;
-			x->chaves[i] = k;
+			x->chaves[i] = aux;
 			x->num++;
 		} else {
 			x->posicao[i] = posicao;
-			x->chaves[i] = k;
+			x->chaves[i] = aux;
 			x->num++;
 		}
 	} 
 	else
 	{
-		while(i > 0 && strcmp(k,x->chaves[i-1])< 0) i--;
-		/* FALTA TESTAR ESSE IF*/
+		while(i > 0 && strcmp(aux,x->chaves[i-1])< 0) i--;
 		if(x->filhos[i]->num == 4)
 		{
 			split_filho_arvB(x,i);
-			if(strcmp(k,x->chaves[i])>0) i++; 
+			if(strcmp(aux,x->chaves[i])>0) i++; 
 		}
-		insereNC_arvB(x->filhos[i],k,posicao);
+		insereNC_arvB(x->filhos[i],aux,posicao);
 	}
 }
 /* FUNÇÃO DE BUSCA NA ARVORE B */
