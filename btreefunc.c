@@ -10,11 +10,11 @@ void print_uso(char const *argv[])
 {
 	printf("Uso: %s <file> -r 1 or 2\n", argv[0]);
 	printf("<file>\n");
-	printf("data1.txt - Arquivo de tamanho variavel\n");
-	printf("data2.txt - Arquivo de tamanho fixo\n");
+	printf("data1.txt - Registros de tamanho variavel\n");
+	printf("data2.txt - Registros de tamanho fixo\n");
 	printf("Options:\n");
-	printf("1 - Arquivo de tamanho variavel\n");
-	printf("2 - Arquivo de tamanho fixo\n");
+	printf("1 - Registros de tamanho variavel\n");
+	printf("2 - Registros de tamanho fixo\n");
 	printf("\n");
 }
 /* FUNÇÃO DE CRIAÇÃO DE CADA NÓ DA ÁRVORE B */
@@ -29,11 +29,13 @@ no* cria_no(no* x)
 arvB* cria_arvB(arvB *T)
 {
 	no* x;
-	T = (arvB *)calloc(1,sizeof(arvB));
+	T = (arvB *)malloc(sizeof(arvB));
 	x = cria_no(x);
 	x->folha = TRUE;
 	x->num = 0;
 	T->raiz = x;
+
+	return T;
 }
 /* FUNÇÃO QUE REALIZA O SPLIT DO NÓ QUANDO NECESSÁRIO */
 void split_filho_arvB(no* x, int i)
@@ -67,7 +69,7 @@ void split_filho_arvB(no* x, int i)
 
 }
 /* FUNÇÃO DE INSERÇÃO DA CHAVE NA ÁRVORE */
-void insere_arvB(arvB *T, char *k, int posicao)
+arvB* insere_arvB(arvB *T, char *k, int posicao)
 {
 	no *r;
 	r = T->raiz;
@@ -79,17 +81,20 @@ void insere_arvB(arvB *T, char *k, int posicao)
 		s->num = 0;
 		s->filhos[0] = r;
 		split_filho_arvB(s,0);
-		insereNC_arvB(s,k,posicao);
+		s = insereNC_arvB(s,k,posicao);
 	} else {
-		insereNC_arvB(r,k,posicao);
+		r = insereNC_arvB(r,k,posicao);
 	}
+	return T;
 }
 /* FUNÇÃO DE INSERÇÃO DE CHAVE QUANDO O NÓ NÃO ESTÁ CHEIO */
-void insereNC_arvB(no* x, char *k, int posicao)
+no* insereNC_arvB(no* x, char *k, int posicao)
 {
-	char *aux = k;
+	char *aux;
 	int i;
 	i = x->num;
+	aux = (char *)calloc(7,sizeof(char));
+	strcpy(aux,k);
 	if(x->folha == TRUE)
 	{
 		if(i > 0){
@@ -117,6 +122,8 @@ void insereNC_arvB(no* x, char *k, int posicao)
 		}
 		insereNC_arvB(x->filhos[i],aux,posicao);
 	}
+
+	return x;
 }
 /* FUNÇÃO DE BUSCA NA ARVORE B */
 int busca_arvB(no *x, char* k)

@@ -8,7 +8,7 @@ int main(int argc, char const *argv[])
 
 	FILE *fp;
 	arvB *T;
-	int opcao,pos_reg,PRR=0;
+	int opcao,pos_reg,num_reg=0,PRR=0;
 	char *chave,*aux,*aux1, c;
 	/* Verificação das condições necessárias para funcionamento correto do programa */
 	if (strcmp(argv[2],"-r")==0 && (atoi(argv[3]) == 1 || atoi(argv[3]) == 2))
@@ -32,23 +32,29 @@ int main(int argc, char const *argv[])
 	/* Alocação, Indexação e Inicialização da arvore B */
 	T = cria_arvB(T);
 	
-	if(atoi(argv[3]) == 1) 
+	if(atoi(argv[3]) == 1) // Registros de tamanho variável com CP de tamanho fixo
 	{
 		chave = (char *)malloc(7*sizeof(char));	
 		do
 		{
 			fread(chave,1,7,fp);	
 			PRR++;
-			insere_arvB(T,chave,PRR);
-			for(int j=0;j<10;){		
+			T = insere_arvB(T,chave,PRR);
+			do{		
 				fscanf(fp,"%c",&c);
-				if(c == ';')j++;
-			}
-			fscanf(fp,"%s",aux);
-			c = fgetc(fp);
-			c = fgetc(fp);
+			} while(c != '\n' && !feof(fp));
 		}while(!feof(fp));
-	
+	} else { // Registros de tamanho fixo
+		chave = (char *)malloc(4*sizeof(char));	
+		do
+		{
+			fread(chave,1,4,fp);	
+			PRR++;
+			T = insere_arvB(T,chave,PRR);
+			do{		
+				fscanf(fp,"%c",&c);
+			} while(c != '\n' && !feof(fp));	
+		}while(!feof(fp));
 	}
 	/* TESTE COM O ALFABETO */
 	/*
@@ -110,8 +116,8 @@ int main(int argc, char const *argv[])
 		default:
 	}while(opcao != 4);
 	*/
-	//free(chave);
-	//fclose(fp);
+	free(chave);
+	fclose(fp);
 	
 	return 0;
 }

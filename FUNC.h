@@ -17,7 +17,7 @@ typedef struct arvore_B{
 void print_uso(char const *argv[]);
 arvB * cria_arvB(arvB *T);
 no* cria_no(no *x);
-void insere_arvB(arvB *T, char *k, int posicao);
+arvB* insere_arvB(arvB *T, char *k, int posicao);
 void split_filho_arvB(no* x, int i);
-void insereNC_arvB(no* x, char *k, int posicao);
+no* insereNC_arvB(no* x, char *k, int posicao);
 int busca_arvB(no *x, char *k);
