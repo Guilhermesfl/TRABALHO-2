@@ -9,7 +9,7 @@ int main(int argc, char const *argv[])
 	FILE *fp;
 	arvB *T;
 	int opcao,pos_reg,PRR=0;
-	char *chave,*aux, c;
+	char *chave,*aux,*aux1, c;
 	/* Verificação das condições necessárias para funcionamento correto do programa */
 	if (strcmp(argv[2],"-r")==0 && (atoi(argv[3]) == 1 || atoi(argv[3]) == 2))
 	{
