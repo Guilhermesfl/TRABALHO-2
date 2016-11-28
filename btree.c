@@ -31,6 +31,7 @@ int main(int argc, char const *argv[])
 		return 0;
 	}
 	/* Alocação, Indexação e Inicialização da arvore B */
+	reg = preenche_reg(reg);
 	T = cria_arvB(T);
 	
 	if(atoi(argv[3]) == 1) // Registros de tamanho variável com CP de tamanho fixo
@@ -77,7 +78,7 @@ int main(int argc, char const *argv[])
 		switch(opcao){
 			case 1:
 				if(atoi(argv[3]) == 1){
-					reg = preenche_reg(reg);
+					fp = fopen(argv[1], "r");
 					printf("Digite a chave do arquivo a ser buscado: ");
 					scanf("%s", chave);
 					pos_reg = busca_arvB(T->raiz,chave,&seeks);
@@ -91,67 +92,42 @@ int main(int argc, char const *argv[])
 						do{
 							printf("%c", c);
 							fscanf(fp,"%c",&c);
-						}while(c != '\n' && c != ';');
+						}while(c != '\n' && c != ';' && !feof(fp));
 						printf("\n");
-					}while(i<=9);
-					rewind(fp);
+					}while(i < 9);
+					seeks = 0;
+					fclose(fp);
 				} else {
 
 				}
 				break;
 			case 2:
 				if(atoi(argv[3]) == 1){
-					fseek(fp,PRR,SEEK_END);
-					printf("Digite a chave do arquivo a ser inserido: ");
+					fp = fopen(argv[1], "a");
+					//fseek(fp,PRR,SEEK_END);
+					fputs("\n", fp);
+					printf("Digite as informacoes do registro\n");
+					printf("Digite a chave primaria:");
 					scanf("%s", chave);
 					insere_arvB(T,chave,&PRR);
 					PRR+= strlen(chave+1);
 					fprintf(fp,"%s;",chave);
-					printf("Digite o nome: ");
-					scanf("%s", aux);
-					fprintf(fp,"%s;",aux);
-					PRR+= strlen(chave+1);
-					printf("Digite o sobrenome: ");
-					scanf("%s", aux);
-					fprintf(fp,"%s;",aux);
-					PRR+= strlen(chave+1);
-					printf("Digite a empresa: ");
-					scanf("%s", aux);
-					fprintf(fp,"%s\n",aux);
-					//PRR+= strlen(chave+1);
-					//printf("Digite o endereço: ");
-					//scanf("%s", aux);
-					//fprintf(fp,"%s;",aux);
-					//PRR+= strlen(chave+1);
-					//printf("Digite a cidade: ");
-					//scanf("%s", aux);
-					//fprintf(fp,"%s;",aux);
-					//PRR+= strlen(chave+1);
-					//printf("Digite o estado: ");
-					//scanf("%s", aux);
-					//fprintf(fp,"%s;",aux);
-					//PRR+= strlen(chave+1);
-					//printf("Digite o codigo ZIP/Postal Code: ");
-					//scanf("%s", aux);
-					//fprintf(fp,"%s;",aux);
-					//PRR+= strlen(chave+1);
-					//printf("Digite o telefone 1: ");
-					//scanf("%s", aux);
-					//fprintf(fp,"%s;",aux);
-					//PRR+= strlen(chave+1);
-					//printf("Digite o telefone 2: ");
-					//scanf("%s", aux);
-					//fprintf(fp,"%s\n",aux);
-					//PRR+= strlen(chave+1);
+					i = 0;
+					do{
+						printf("%s", reg->campos[i]);
+						scanf(" %[^\n]s",aux);
+						if(i != 8) fprintf(fp,"%s;", aux);
+						else fprintf(fp,"%s", aux);
+						PRR+=strlen(aux+1);
+						i++;
+					}while(i<9);
 					fclose(fp);
-					return 0;
 				} else {
 
 				}	
-				fclose(fp);
 				//pos_reg nesse caso é uma posição após o ultimo registro e precisa ser calculada
-				insere_arvB(T,chave,&pos_reg);
-				break;
+				//insere_arvB(T,chave,&pos_reg);
+				//break;
 			//case 3: ;
 				//Criar a função responsável por mostrar a arvore
 
@@ -159,10 +135,7 @@ int main(int argc, char const *argv[])
 
 	}while(opcao != 4);
 
-
-
 	free(chave);
-	fclose(fp);
 	
 	return 0;
 }

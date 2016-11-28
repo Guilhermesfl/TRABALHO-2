@@ -152,9 +152,9 @@ int busca_arvB(no *x, char* k, int* seeks)
 	int i=0;
 	*seeks = *seeks + 1;
 
-	while(i<=x->num && strcmp(k,x->chaves[i])>0) i++;
+	while(i < x->num && strcmp(k,x->chaves[i])>0) i++;
 
-	if(i<=x->num && strcmp(k,x->chaves[i])==0) return x->posicao[i];
+	if(i< x->num && strcmp(k,x->chaves[i])==0) return x->posicao[i];
 	else if(x->folha == TRUE) return -1;
 	else return busca_arvB(x->filhos[i],k,seeks);
 }
