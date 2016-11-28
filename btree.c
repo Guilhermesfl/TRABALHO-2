@@ -8,14 +8,15 @@ int main(int argc, char const *argv[])
 
 	FILE *fp;
 	arvB *T;
-	int opcao,pos_reg,num_reg=0,PRR=0;
-	char *chave,*aux,*aux1, c;
+	REG *reg;
+	int opcao,pos_reg,num_reg=0,PRR=0,NRR=0,seeks=0,i;
+	char *chave,*aux, c;
 	/* Verificação das condições necessárias para funcionamento correto do programa */
 	if (strcmp(argv[2],"-r")==0 && (atoi(argv[3]) == 1 || atoi(argv[3]) == 2))
 	{
 		if(((strcmp(argv[1],"data1.txt")==0) && atoi(argv[3]) == 1) || ((strcmp(argv[1],"data2.txt")==0) && atoi(argv[3]) == 2))
 		{
-			fp = fopen(argv[1], "r");
+			fp = fopen(argv[1], "r+");
 			if(fp == NULL)
 			{
 				printf("Não foi possível abrir o arquivo %s\n", argv[1]);
@@ -37,11 +38,12 @@ int main(int argc, char const *argv[])
 		chave = (char *)malloc(7*sizeof(char));	
 		do
 		{
-			fread(chave,1,7,fp);	
-			PRR++;
-			T = insere_arvB(T,chave,PRR);
+			fread(chave,1,7,fp);
+			T = insere_arvB(T,chave,&PRR);
+			PRR+=7;
 			do{		
 				fscanf(fp,"%c",&c);
+				PRR++;
 			} while(c != '\n' && !feof(fp));
 		}while(!feof(fp));
 	} else { // Registros de tamanho fixo
@@ -49,44 +51,20 @@ int main(int argc, char const *argv[])
 		do
 		{
 			fread(chave,1,4,fp);	
-			PRR++;
-			T = insere_arvB(T,chave,PRR);
+			NRR++;
+			T = insere_arvB(T,chave,&NRR);
 			do{		
 				fscanf(fp,"%c",&c);
 			} while(c != '\n' && !feof(fp));	
 		}while(!feof(fp));
 	}
-	/* TESTE COM O ALFABETO */
-	/*
-	insere_arvB(T,"C",1);
-	insere_arvB(T,"D",2);
-	insere_arvB(T,"S",3);
-	insere_arvB(T,"T",4);
-	insere_arvB(T,"A",5);
-	insere_arvB(T,"M",5);
-	insere_arvB(T,"P",5); 
-	insere_arvB(T,"I",5);
-	insere_arvB(T,"B",5);
-	insere_arvB(T,"W",5);
-	insere_arvB(T,"N",5);
-	insere_arvB(T,"G",5);
-	insere_arvB(T,"U",5);
-	insere_arvB(T,"R",5);
-	insere_arvB(T,"K",5);
-	insere_arvB(T,"E",5);
-	insere_arvB(T,"H",5);
-	insere_arvB(T,"O",5);
-	insere_arvB(T,"L",5);
-	insere_arvB(T,"J",5);
-	insere_arvB(T,"Y",5);
-	insere_arvB(T,"Q",5);
-	insere_arvB(T,"Z",5);
-	insere_arvB(T,"F",5);
-	insere_arvB(T,"X",5);
-	insere_arvB(T,"V",5);
-	*/
-	/* MENU DE OPÇÕES */
-	/*do{
+	rewind(fp);
+
+	//fseek(fp,236,SEEK_CUR);
+	//fread(chave,1,7,fp);
+
+	/******************************* MENU DE OPÇÕES *******************************/
+	do{
 		printf("**************************************\n");
 		printf("*               MENU                 *\n");
 		printf("1 - Buscar Registro\n");
@@ -94,28 +72,95 @@ int main(int argc, char const *argv[])
 		printf("3 - Mostrar Arvore-B\n");
 		printf("4 - Sair\n");
 		printf("Digite a opcao desejada:");
-		scanf(&opcao);
-		while(opcao < 1 && opcao > 4)
-		{
-			printf("Digite um opcao valida:"); 
-			scanf(&opcao);
-		}
-		switch(opcao):
+		scanf("%d",&opcao);
+	
+		switch(opcao){
 			case 1:
-				printf("Digite a chave do arquivo a ser buscado: ");
-				scanf("%s", chave);
-				pos_reg = busca_arvB(T->raiz,chave);
+				if(atoi(argv[3]) == 1){
+					reg = preenche_reg(reg);
+					printf("Digite a chave do arquivo a ser buscado: ");
+					scanf("%s", chave);
+					pos_reg = busca_arvB(T->raiz,chave,&seeks);
+					fseek(fp,pos_reg+8,SEEK_CUR);
+					printf("O numero de seeks necessarios seria: %d\n", seeks);
+					i = 0;
+					do{
+						printf("%s", reg->campos[i]);
+						i++;
+						fscanf(fp,"%c",&c);
+						do{
+							printf("%c", c);
+							fscanf(fp,"%c",&c);
+						}while(c != '\n' && c != ';');
+						printf("\n");
+					}while(i<=9);
+					rewind(fp);
+				} else {
+
+				}
+				break;
 			case 2:
-				printf("Digite a chave do arquivo a ser inserido: ")
-				scanf("%s", chave);
+				if(atoi(argv[3]) == 1){
+					fseek(fp,PRR,SEEK_END);
+					printf("Digite a chave do arquivo a ser inserido: ");
+					scanf("%s", chave);
+					insere_arvB(T,chave,&PRR);
+					PRR+= strlen(chave+1);
+					fprintf(fp,"%s;",chave);
+					printf("Digite o nome: ");
+					scanf("%s", aux);
+					fprintf(fp,"%s;",aux);
+					PRR+= strlen(chave+1);
+					printf("Digite o sobrenome: ");
+					scanf("%s", aux);
+					fprintf(fp,"%s;",aux);
+					PRR+= strlen(chave+1);
+					printf("Digite a empresa: ");
+					scanf("%s", aux);
+					fprintf(fp,"%s\n",aux);
+					//PRR+= strlen(chave+1);
+					//printf("Digite o endereço: ");
+					//scanf("%s", aux);
+					//fprintf(fp,"%s;",aux);
+					//PRR+= strlen(chave+1);
+					//printf("Digite a cidade: ");
+					//scanf("%s", aux);
+					//fprintf(fp,"%s;",aux);
+					//PRR+= strlen(chave+1);
+					//printf("Digite o estado: ");
+					//scanf("%s", aux);
+					//fprintf(fp,"%s;",aux);
+					//PRR+= strlen(chave+1);
+					//printf("Digite o codigo ZIP/Postal Code: ");
+					//scanf("%s", aux);
+					//fprintf(fp,"%s;",aux);
+					//PRR+= strlen(chave+1);
+					//printf("Digite o telefone 1: ");
+					//scanf("%s", aux);
+					//fprintf(fp,"%s;",aux);
+					//PRR+= strlen(chave+1);
+					//printf("Digite o telefone 2: ");
+					//scanf("%s", aux);
+					//fprintf(fp,"%s\n",aux);
+					//PRR+= strlen(chave+1);
+					fclose(fp);
+					return 0;
+				} else {
+
+				}	
+				fclose(fp);
 				//pos_reg nesse caso é uma posição após o ultimo registro e precisa ser calculada
-				insere_arvB(T,chave,pos_reg);
-			case 3: ;
+				insere_arvB(T,chave,&pos_reg);
+				break;
+			//case 3: ;
 				//Criar a função responsável por mostrar a arvore
 
-		default:
+		}
+
 	}while(opcao != 4);
-	*/
+
+
+
 	free(chave);
 	fclose(fp);
 	

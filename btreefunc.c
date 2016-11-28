@@ -17,6 +17,22 @@ void print_uso(char const *argv[])
 	printf("2 - Registros de tamanho fixo\n");
 	printf("\n");
 }
+/* FUNÇÃO QUE PREENCHE O SIGNIFICADO DOS CAMPOS DO REGISTRO */
+REG* preenche_reg(REG *reg)
+{
+	reg = (REG *)malloc(sizeof(REG));
+	reg->campos[0] = "Nome:";
+	reg->campos[1] = "Sobrenome:";
+	reg->campos[2] = "Empresa:";
+	reg->campos[3] = "Endereço:";
+	reg->campos[4] = "Cidade:";
+	reg->campos[5] = "Estado:";
+	reg->campos[6] = "ZIP/PostalCode:";
+	reg->campos[7] = "Phone1:";
+	reg->campos[8] = "Phone2:";
+
+	return reg;
+}
 /* FUNÇÃO DE CRIAÇÃO DE CADA NÓ DA ÁRVORE B */
 no* cria_no(no* x)
 {
@@ -47,6 +63,7 @@ void split_filho_arvB(no* x, int i)
 	z->num = 1;
 
 	for (int j = 0; j < 1; ++j) z->chaves[j] = y->chaves[j+3];
+	for (int j = 0; j < 1; ++j) z->posicao[j] = y->posicao[j+3];
 	
 	if(y->folha == FALSE)
 	{
@@ -54,11 +71,14 @@ void split_filho_arvB(no* x, int i)
 		for (int j = 0; j < 3; ++j) y->filhos[j+3] = NULL;
 	}	
 	for (int j = x->num; j >= i; --j) x->filhos[j+1] = x->filhos[j];
-	
-	for (int j = x->num-1; j >= i; --j) x->chaves[j+1] = x->chaves[j];
+	for (int j = x->num-1; j >= i; --j){ 
+		x->chaves[j+1] = x->chaves[j];
+		x->posicao[j+1] = x->posicao[j];
+	}
 	
 	x->filhos[i+1] = z;
 	x->chaves[i] = y->chaves[2];
+	x->posicao[i] = y->posicao[2];
 	x->num++;	
 	for (int j = 0; j < 2; ++j)
 	{
@@ -69,7 +89,7 @@ void split_filho_arvB(no* x, int i)
 
 }
 /* FUNÇÃO DE INSERÇÃO DA CHAVE NA ÁRVORE */
-arvB* insere_arvB(arvB *T, char *k, int posicao)
+arvB* insere_arvB(arvB *T, char *k, int *posicao)
 {
 	no *r;
 	r = T->raiz;
@@ -88,7 +108,7 @@ arvB* insere_arvB(arvB *T, char *k, int posicao)
 	return T;
 }
 /* FUNÇÃO DE INSERÇÃO DE CHAVE QUANDO O NÓ NÃO ESTÁ CHEIO */
-no* insereNC_arvB(no* x, char *k, int posicao)
+no* insereNC_arvB(no* x, char *k, int *posicao)
 {
 	char *aux;
 	int i;
@@ -101,13 +121,14 @@ no* insereNC_arvB(no* x, char *k, int posicao)
 			while(i > 0 && strcmp(aux,x->chaves[i-1])<0)
 			{
 				x->chaves[i] = x->chaves[i-1];
+				x->posicao[i] = x->posicao[i-1]; 
 				i--;
 			}
-			x->posicao[i] = posicao;
+			x->posicao[i] = *posicao;
 			x->chaves[i] = aux;
 			x->num++;
 		} else {
-			x->posicao[i] = posicao;
+			x->posicao[i] = *posicao;
 			x->chaves[i] = aux;
 			x->num++;
 		}
@@ -126,15 +147,16 @@ no* insereNC_arvB(no* x, char *k, int posicao)
 	return x;
 }
 /* FUNÇÃO DE BUSCA NA ARVORE B */
-int busca_arvB(no *x, char* k)
+int busca_arvB(no *x, char* k, int* seeks)
 {
-	int i=1;
+	int i=0;
+	*seeks = *seeks + 1;
 
 	while(i<=x->num && strcmp(k,x->chaves[i])>0) i++;
 
 	if(i<=x->num && strcmp(k,x->chaves[i])==0) return x->posicao[i];
 	else if(x->folha == TRUE) return -1;
-	else return busca_arvB(x->filhos[i],k);
+	else return busca_arvB(x->filhos[i],k,seeks);
 }
 
 
