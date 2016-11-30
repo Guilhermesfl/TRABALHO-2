@@ -9,7 +9,7 @@ int main(int argc, char const *argv[])
 	FILE *fp;
 	arvB *T;
 	REG *reg;
-	int opcao,pos_reg,num_reg=0,PRR=0,NRR=0,seeks=0,i;
+	int opcao,pos_reg,num_reg=0,PRR=0,NRR=0,seeks=0,i,verificador;
 	char *chave,*aux, c;
 	/* Verificação das condições necessárias para funcionamento correto do programa */
 	if (strcmp(argv[2],"-r")==0 && (atoi(argv[3]) == 1 || atoi(argv[3]) == 2))
@@ -36,6 +36,7 @@ int main(int argc, char const *argv[])
 	
 	if(atoi(argv[3]) == 1) // Registros de tamanho variável
 	{
+		verificador = 1; 
 		chave = (char *)malloc(7*sizeof(char));	
 		do
 		{
@@ -48,6 +49,7 @@ int main(int argc, char const *argv[])
 			} while(c != '\n' && !feof(fp));
 		}while(!feof(fp));
 	} else { // Registros de tamanho fixo
+		verificador = 2;
 		chave = (char *)malloc(4*sizeof(char));	
 		do
 		{
@@ -75,12 +77,16 @@ int main(int argc, char const *argv[])
 	
 		switch(opcao){
 			case 1:
-				if(atoi(argv[3]) == 1){
-					fp = fopen(argv[1], "r");
+				if(verificador == 1){
+					fp = fopen("data1.txt", "r");
 					printf("Digite a chave do arquivo a ser buscado: ");
 					scanf("%s", chave);
 					pos_reg = busca_arvB(T->raiz,chave,&seeks);
-					pos_reg += strlen(chave) + 1;
+					if(pos_reg == -1){
+						printf("Essa chave nao existe\n");
+						return 0;
+					}
+					pos_reg = pos_reg + strlen(chave) + 1;
 					fseek(fp,pos_reg,SEEK_CUR);
 					printf("O numero de seeks necessarios seria: %d\n", seeks);
 					i = 0;
@@ -102,27 +108,25 @@ int main(int argc, char const *argv[])
 				}
 				break;
 			case 2:
-				if(atoi(argv[3]) == 1){
-					fp = fopen(argv[1], "a");
+				if(verificador == 1){
+					fp = fopen("data1.txt", "a");
+					//fseek(fp,PRR,SEEK_END);
 					fputs("\n", fp);
 					printf("Digite as informacoes do registro\n");
 					printf("Digite a chave primaria:");
 					scanf("%s", chave);
+					getchar();
 					insere_arvB(T,chave,&PRR);
-					PRR+= (strlen(chave) + 1);
+					PRR = PRR + strlen(chave) + 1;
 					fprintf(fp,"%s;",chave);
-					PRR++;
 					i = 0;
 					do{
 						printf("%s", reg->campos[i]);
-						scanf(" %[^\n]s",aux);
-						if(i != 8){
-							fprintf(fp,"%s;", aux);
-							PRR+= (strlen(aux) + 1);
-						}else {
-							fprintf(fp,"%s", aux);
-							PRR += strlen(aux);
-						}
+						scanf("%[^\n]s", aux);
+						getchar();
+						if(i != 8) fprintf(fp,"%s;", aux);
+						else fprintf(fp,"%s", aux);
+						PRR=PRR+strlen(aux)+1;
 						i++;
 					}while(i<9);
 					rewind(fp);
@@ -133,14 +137,14 @@ int main(int argc, char const *argv[])
 				//pos_reg nesse caso é uma posição após o ultimo registro e precisa ser calculada
 				//insere_arvB(T,chave,&pos_reg);
 				//break;
-			//case 3: ;
-				//Criar a função responsável por mostrar a arvore
-
+			//case 3:
+				
 		}
 
 	}while(opcao != 4);
 
-	free(chave);
+	fclose(fp);
+	//free(chave);
 	
 	return 0;
 }
