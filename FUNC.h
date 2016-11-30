@@ -7,6 +7,7 @@ struct Bno{
 	int num; // Número de chaves armazenadas no nó
 	char* chaves[4]; // Armazena as chaves em ordem crescente
 	int posicao[4];
+	int pagina; // Número da página que o nó está
 	bool folha;
 	no* filhos[5];
 };
@@ -23,7 +24,7 @@ REG* preenche_reg(REG *reg);
 void print_uso(char const *argv[]);
 arvB* cria_arvB(arvB *T);
 no* cria_no(no *x);
-arvB* insere_arvB(arvB *T, char *k, int *posicao);
-void split_filho_arvB(no* x, int i);
-no* insereNC_arvB(no* x, char *k, int *posicao);
+arvB* insere_arvB(arvB *T, char *k, int *posicao, int* regulador);
+void split_filho_arvB(no* x, int i, int* regulador);
+no* insereNC_arvB(no* x, char *k, int *posicao, int* regulador);
 int busca_arvB(no *x, char *k, int* seeks);

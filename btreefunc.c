@@ -49,18 +49,22 @@ arvB* cria_arvB(arvB *T)
 	x = cria_no(x);
 	x->folha = TRUE;
 	x->num = 0;
+	x->pagina = 0;
 	T->raiz = x;
 
 	return T;
 }
 /* FUNÇÃO QUE REALIZA O SPLIT DO NÓ QUANDO NECESSÁRIO */
-void split_filho_arvB(no* x, int i)
+void split_filho_arvB(no* x, int i, int* regulador)
 {
 	no *z, *y;
 	z = cria_no(z);
 	y = x->filhos[i];
 	z->folha = y->folha;
 	z->num = 1;
+
+	*regulador = *regulador +1;
+	z->pagina = *regulador;
 
 	for (int j = 0; j < 1; ++j) z->chaves[j] = y->chaves[j+3];
 	for (int j = 0; j < 1; ++j) z->posicao[j] = y->posicao[j+3];
@@ -70,6 +74,7 @@ void split_filho_arvB(no* x, int i)
 		for (int j = 0; j < 2; ++j) z->filhos[j] = y->filhos[j+3];
 		for (int j = 0; j < 3; ++j) y->filhos[j+3] = NULL;
 	}	
+
 	for (int j = x->num; j >= i; --j) x->filhos[j+1] = x->filhos[j];
 	for (int j = x->num-1; j >= i; --j){ 
 		x->chaves[j+1] = x->chaves[j];
@@ -80,6 +85,7 @@ void split_filho_arvB(no* x, int i)
 	x->chaves[i] = y->chaves[2];
 	x->posicao[i] = y->posicao[2];
 	x->num++;	
+
 	for (int j = 0; j < 2; ++j)
 	{
 		y->chaves[j+2] = NULL;
@@ -89,9 +95,10 @@ void split_filho_arvB(no* x, int i)
 
 }
 /* FUNÇÃO DE INSERÇÃO DA CHAVE NA ÁRVORE */
-arvB* insere_arvB(arvB *T, char *k, int *posicao)
+arvB* insere_arvB(arvB *T, char *k, int *posicao, int* regulador)
 {
 	no *r;
+	int vef = 0;
 	r = T->raiz;
 	if(r->num == 4){
 		no *s;
@@ -100,18 +107,21 @@ arvB* insere_arvB(arvB *T, char *k, int *posicao)
 		s->folha = FALSE;
 		s->num = 0;
 		s->filhos[0] = r;
-		split_filho_arvB(s,0);
-		s = insereNC_arvB(s,k,posicao);
+		split_filho_arvB(s,0,regulador); //Para a raiz
+		s = insereNC_arvB(s,k,posicao,regulador);
+		*regulador = *regulador +1;
+		s->pagina = *regulador;
 	} else {
-		r = insereNC_arvB(r,k,posicao);
+		r = insereNC_arvB(r,k,posicao,regulador);
 	}
 	return T;
 }
 /* FUNÇÃO DE INSERÇÃO DE CHAVE QUANDO O NÓ NÃO ESTÁ CHEIO */
-no* insereNC_arvB(no* x, char *k, int *posicao)
+no* insereNC_arvB(no* x, char *k, int *posicao, int* regulador)
 {
 	char *aux;
 	int i;
+	int vef = 0;
 	i = x->num;
 	aux = (char *)calloc(7,sizeof(char));
 	strcpy(aux,k);
@@ -138,10 +148,10 @@ no* insereNC_arvB(no* x, char *k, int *posicao)
 		while(i > 0 && strcmp(aux,x->chaves[i-1])< 0) i--;
 		if(x->filhos[i]->num == 4)
 		{
-			split_filho_arvB(x,i);
+			split_filho_arvB(x,i,regulador); //Para nó folha
 			if(strcmp(aux,x->chaves[i])>0) i++; 
 		}
-		insereNC_arvB(x->filhos[i],aux,posicao);
+		insereNC_arvB(x->filhos[i],aux,posicao,regulador);
 	}
 
 	return x;
@@ -158,6 +168,3 @@ int busca_arvB(no *x, char* k, int* seeks)
 	else if(x->folha == TRUE) return -1;
 	else return busca_arvB(x->filhos[i],k,seeks);
 }
-
-
-

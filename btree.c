@@ -9,7 +9,8 @@ int main(int argc, char const *argv[])
 	FILE *fp;
 	arvB *T;
 	REG *reg;
-	int opcao,pos_reg,num_reg=0,PRR=0,NRR=0,seeks=0,i,verificador;
+	int opcao,pos_reg,num_reg=0,PRR=0,NRR=0,seeks=0,i,verificador = 0, pagina=0, regulador = 0, regulador2 = 0;
+	int numerador = 1;
 	char *chave,*aux, c;
 	/* Verificação das condições necessárias para funcionamento correto do programa */
 	if (strcmp(argv[2],"-r")==0 && (atoi(argv[3]) == 1 || atoi(argv[3]) == 2))
@@ -30,13 +31,14 @@ int main(int argc, char const *argv[])
 		print_uso(argv);
 		return 0;
 	}
-	/**************** Alocação, Indexação e Inicialização da arvore B *********************************/
+	/* Alocação, Indexação e Inicialização da arvore B */
+
 	reg = preenche_reg(reg);
 	T = cria_arvB(T);
 	
-	if(atoi(argv[3]) == 1) // Registros de tamanho variável
+	if(atoi(argv[3]) == 1) // Registros de tamanho variável com CP de tamanho fixo
 	{
-		verificador = 1; 
+		verificador = 1;
 		chave = (char *)malloc(7*sizeof(char));	
 		do
 		{
@@ -64,7 +66,10 @@ int main(int argc, char const *argv[])
 	rewind(fp);
 	fclose(fp);
 
+	T = cria_arvB(T);
+
 	/******************************* MENU DE OPÇÕES *******************************/
+
 	do{
 		printf("**************************************\n");
 		printf("*               MENU                 *\n");
