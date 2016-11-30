@@ -30,11 +30,11 @@ int main(int argc, char const *argv[])
 		print_uso(argv);
 		return 0;
 	}
-	/* Alocação, Indexação e Inicialização da arvore B */
+	/**************** Alocação, Indexação e Inicialização da arvore B *********************************/
 	reg = preenche_reg(reg);
 	T = cria_arvB(T);
 	
-	if(atoi(argv[3]) == 1) // Registros de tamanho variável com CP de tamanho fixo
+	if(atoi(argv[3]) == 1) // Registros de tamanho variável
 	{
 		chave = (char *)malloc(7*sizeof(char));	
 		do
@@ -60,9 +60,7 @@ int main(int argc, char const *argv[])
 		}while(!feof(fp));
 	}
 	rewind(fp);
-
-	//fseek(fp,236,SEEK_CUR);
-	//fread(chave,1,7,fp);
+	fclose(fp);
 
 	/******************************* MENU DE OPÇÕES *******************************/
 	do{
@@ -82,7 +80,8 @@ int main(int argc, char const *argv[])
 					printf("Digite a chave do arquivo a ser buscado: ");
 					scanf("%s", chave);
 					pos_reg = busca_arvB(T->raiz,chave,&seeks);
-					fseek(fp,pos_reg+8,SEEK_CUR);
+					pos_reg += strlen(chave) + 1;
+					fseek(fp,pos_reg,SEEK_CUR);
 					printf("O numero de seeks necessarios seria: %d\n", seeks);
 					i = 0;
 					do{
@@ -96,6 +95,7 @@ int main(int argc, char const *argv[])
 						printf("\n");
 					}while(i < 9);
 					seeks = 0;
+					rewind(fp);
 					fclose(fp);
 				} else {
 
@@ -104,23 +104,28 @@ int main(int argc, char const *argv[])
 			case 2:
 				if(atoi(argv[3]) == 1){
 					fp = fopen(argv[1], "a");
-					//fseek(fp,PRR,SEEK_END);
 					fputs("\n", fp);
 					printf("Digite as informacoes do registro\n");
 					printf("Digite a chave primaria:");
 					scanf("%s", chave);
 					insere_arvB(T,chave,&PRR);
-					PRR+= strlen(chave+1);
+					PRR+= (strlen(chave) + 1);
 					fprintf(fp,"%s;",chave);
+					PRR++;
 					i = 0;
 					do{
 						printf("%s", reg->campos[i]);
 						scanf(" %[^\n]s",aux);
-						if(i != 8) fprintf(fp,"%s;", aux);
-						else fprintf(fp,"%s", aux);
-						PRR+=strlen(aux+1);
+						if(i != 8){
+							fprintf(fp,"%s;", aux);
+							PRR+= (strlen(aux) + 1);
+						}else {
+							fprintf(fp,"%s", aux);
+							PRR += strlen(aux);
+						}
 						i++;
 					}while(i<9);
+					rewind(fp);
 					fclose(fp);
 				} else {
 
