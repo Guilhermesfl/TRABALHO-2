@@ -10,8 +10,9 @@ int main(int argc, char const *argv[])
 	arvB *T;
 	REG *reg;
 	int opcao,pos_reg,num_reg=0,PRR=0,NRR=0,seeks=0,i,verificador = 0, pagina=0, regulador = 0, regulador2 = 0;
-	int numerador = 1;
+	int numerador = 1,j,k;
 	char *chave,*aux, c;
+	no *no_aux;
 	/* Verificação das condições necessárias para funcionamento correto do programa */
 	if (strcmp(argv[2],"-r")==0 && (atoi(argv[3]) == 1 || atoi(argv[3]) == 2))
 	{
@@ -43,7 +44,7 @@ int main(int argc, char const *argv[])
 		do
 		{
 			fread(chave,1,7,fp);
-			T = insere_arvB(T,chave,&PRR);
+			T = insere_arvB(T,chave,&PRR,&regulador);
 			PRR+=7;
 			do{		
 				fscanf(fp,"%c",&c);
@@ -57,7 +58,7 @@ int main(int argc, char const *argv[])
 		{
 			fread(chave,1,4,fp);	
 			NRR++;
-			T = insere_arvB(T,chave,&NRR);
+			T = insere_arvB(T,chave,&NRR,&regulador);
 			do{		
 				fscanf(fp,"%c",&c);
 			} while(c != '\n' && !feof(fp));	
@@ -65,8 +66,6 @@ int main(int argc, char const *argv[])
 	}
 	rewind(fp);
 	fclose(fp);
-
-	T = cria_arvB(T);
 
 	/******************************* MENU DE OPÇÕES *******************************/
 
@@ -112,6 +111,7 @@ int main(int argc, char const *argv[])
 
 				}
 				break;
+
 			case 2:
 				if(verificador == 1){
 					fp = fopen("data1.txt", "a");
@@ -121,7 +121,7 @@ int main(int argc, char const *argv[])
 					printf("Digite a chave primaria:");
 					scanf("%s", chave);
 					getchar();
-					insere_arvB(T,chave,&PRR);
+					insere_arvB(T,chave,&PRR,&regulador);
 					PRR = PRR + strlen(chave) + 1;
 					fprintf(fp,"%s;",chave);
 					i = 0;
@@ -139,17 +139,17 @@ int main(int argc, char const *argv[])
 				} else {
 
 				}	
-				//pos_reg nesse caso é uma posição após o ultimo registro e precisa ser calculada
-				//insere_arvB(T,chave,&pos_reg);
-				//break;
-			//case 3:
-				
-		}
+				break;
 
+			case 3:
+				imprime_arvB(T->raiz);
+			break;
+
+			default:;
+		}	
 	}while(opcao != 4);
 
-	fclose(fp);
-	//free(chave);
+	free(chave);
 	
 	return 0;
 }

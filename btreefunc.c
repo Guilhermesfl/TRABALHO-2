@@ -168,3 +168,43 @@ int busca_arvB(no *x, char* k, int* seeks)
 	else if(x->folha == TRUE) return -1;
 	else return busca_arvB(x->filhos[i],k,seeks);
 }
+void imprime_arvB(no*x)
+{
+	int i=0;
+	imprime(x);
+	
+	while(x->filhos[i] != NULL)
+	{
+		imprime(x->filhos[i]);
+		i++;
+	}
+	i = 0;
+	while(x->filhos[i] != NULL)
+	{
+		imprime_arvB(x->filhos[i]);
+		i++;
+	}
+
+
+}
+void imprime(no *x)
+{
+	int j = 0,k;
+	printf("N%d:", j);
+	printf("\n");
+	i = 0;
+	printf("P%d:", x->pagina);
+
+	while(x->chaves[i]!=NULL){
+		printf("%s|", x->chaves[i]);
+		i++;
+	}
+	printf("      ");
+	i = 0;
+	while(x->filhos[i]!=NULL){
+		printf("%d|", x->filhos[i]->pagina);
+		i++;
+	}
+	printf("\n");	
+	j++;
+}
