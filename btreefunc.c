@@ -18,9 +18,9 @@ void print_uso(char const *argv[])
 	printf("\n");
 }
 /* FUNÇÃO QUE PREENCHE O SIGNIFICADO DOS CAMPOS DO REGISTRO */
-REG* preenche_reg(REG *reg)
+REG1* preenche_reg1(REG1 *reg)
 {
-	reg = (REG *)malloc(sizeof(REG));
+	reg = (REG1 *)malloc(sizeof(REG1));
 	reg->campos[0] = "Nome:";
 	reg->campos[1] = "Sobrenome:";
 	reg->campos[2] = "Empresa:";
@@ -32,6 +32,16 @@ REG* preenche_reg(REG *reg)
 	reg->campos[8] = "Phone2:";
 
 	return reg;
+}
+REG2* preenche_reg2(REG2 *reg)
+{
+	reg = (REG2 *)malloc(sizeof(REG2));
+	reg->campos[0] = "Nome:";
+	reg->campos[1] = "Data:";
+	reg->campos[2] = "Empresa:";
+
+	return reg;
+
 }
 /* FUNÇÃO DE CRIAÇÃO DE CADA NÓ DA ÁRVORE B */
 no* cria_no(no* x)
@@ -168,6 +178,7 @@ int busca_arvB(no *x, char* k, int* seeks)
 	else if(x->folha == TRUE) return -1;
 	else return busca_arvB(x->filhos[i],k,seeks);
 }
+/*
 void imprime_arvB(no*x)
 {
 	int i=0;
@@ -208,3 +219,4 @@ void imprime(no *x)
 	printf("\n");	
 	j++;
 }
+*/

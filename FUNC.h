@@ -1,7 +1,8 @@
 #include <stdbool.h>
 
 typedef struct Bno no;
-typedef struct Registro REG;
+typedef struct Registro1 REG1;
+typedef struct Registro2 REG2;
 
 struct Bno{
 	int num; // Número de chaves armazenadas no nó
@@ -12,15 +13,20 @@ struct Bno{
 	no* filhos[5];
 };
 
-struct Registro {
+struct Registro1 {
 	char *campos[9];
+};
+
+struct Registro2 {
+	char *campos[3];
 };
 
 typedef struct arvore_B{
 	no *raiz;
 } arvB;
 
-REG* preenche_reg(REG *reg);
+REG1* preenche_reg1(REG1 *reg);
+REG2* preenche_reg2(REG2 *reg);
 void print_uso(char const *argv[]);
 arvB* cria_arvB(arvB *T);
 no* cria_no(no *x);
