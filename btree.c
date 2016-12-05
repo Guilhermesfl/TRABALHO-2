@@ -216,10 +216,13 @@ int main(int argc, char const *argv[])
 				break;
 
 			case 3:
-				//imprime_arvB(T->raiz);
-			break;
+				imprime_arvB(T->raiz);
+				break;
 
-			default:;
+			default:
+
+				break;
+				
 		}	
 	}while(opcao != 4);
 	

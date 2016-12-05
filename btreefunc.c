@@ -60,6 +60,7 @@ arvB* cria_arvB(arvB *T)
 	x->folha = TRUE;
 	x->num = 0;
 	x->pagina = 0;
+	x->cor = 0;
 	T->raiz = x;
 
 	return T;
@@ -178,45 +179,62 @@ int busca_arvB(no *x, char* k, int* seeks)
 	else if(x->folha == TRUE) return -1;
 	else return busca_arvB(x->filhos[i],k,seeks);
 }
-/*
+
 void imprime_arvB(no*x)
 {
-	int i=0;
-	imprime(x);
-	
-	while(x->filhos[i] != NULL)
+	int i=0,j,k;
+	pilha Q;
+	no *u,*aux;
+
+	Q.topo = x;
+	aux = Q.topo;
+
+	while(Q.topo != NULL)
 	{
-		imprime(x->filhos[i]);
-		i++;
-	}
-	i = 0;
-	while(x->filhos[i] != NULL)
-	{
-		imprime_arvB(x->filhos[i]);
-		i++;
+		u = Q.topo;
+		if(Q.topo->prox != NULL) Q.topo =  Q.topo->prox;
+		else Q.topo = NULL;
+		if(u->folha == FALSE){
+			while(i <= u->num){
+				if(u->filhos[i]->cor == 0){
+					u->filhos[i]->cor = 1;
+					if(Q.topo == NULL){
+						Q.topo = u->filhos[i];
+						aux = Q.topo;
+					}
+					else{
+						aux->prox = u->filhos[i];
+						aux = aux->prox;
+					} 
+				}
+				i++;
+			}
+		}
+		imprime(u);
+
+		u->cor = 2;
+		i=0;
 	}
 
 
 }
 void imprime(no *x)
 {
-	int j = 0,k;
+	int j = 0,k,i = 0;;
 	printf("N%d:", j);
 	printf("\n");
-	i = 0;
 	printf("P%d:", x->pagina);
 
-	while(x->chaves[i]!=NULL){
+	while(x->chaves[i]!=NULL && i < x->num){
 		printf("%s|", x->chaves[i]);
 		i++;
 	}
 	printf("      ");
 	i = 0;
-	while(x->filhos[i]!=NULL){
+	while(x->filhos[i]!=NULL && i <= x->num){
 		printf("%d|", x->filhos[i]->pagina);
 		i++;
 	}
 	printf("\n");	
 	j++;
 }
-*/

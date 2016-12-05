@@ -11,6 +11,8 @@ struct Bno{
 	int pagina; // Número da página que o nó está
 	bool folha;
 	no* filhos[5];
+	int cor;
+	no *prox;
 };
 
 struct Registro1 {
@@ -25,6 +27,10 @@ typedef struct arvore_B{
 	no *raiz;
 } arvB;
 
+typedef struct Pilha{
+	no *topo;
+} pilha;
+
 REG1* preenche_reg1(REG1 *reg);
 REG2* preenche_reg2(REG2 *reg);
 void print_uso(char const *argv[]);
@@ -34,3 +40,5 @@ arvB* insere_arvB(arvB *T, char *k, int *posicao, int* regulador);
 void split_filho_arvB(no* x, int i, int* regulador);
 no* insereNC_arvB(no* x, char *k, int *posicao, int* regulador);
 int busca_arvB(no *x, char *k, int* seeks);
+void imprime(no *x);
+void imprime_arvB(no*x);
