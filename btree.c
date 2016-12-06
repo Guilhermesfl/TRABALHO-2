@@ -116,14 +116,14 @@ int main(int argc, char const *argv[])
 						printf("Essa chave nao existe\n");
 						break;
 					} else {
-						/*NECESSARIO CORRIGIR PARA O ULTIMO REGISTRO */ 
 						pos_reg = busca_arvB(T->raiz,chave,&seeks);
 						if(pos_reg == -1){
 							printf("Essa chave nao existe\n");
 							break;
 						} else {
 							printf("O numero de seeks necessarios seria: %d\n", seeks);
-							fseek(fp,(pos_reg-1)*123+5,SEEK_CUR);
+							if(pos_reg < 47)fseek(fp,(pos_reg-1)*123+5,SEEK_CUR);
+							else fseek(fp,(pos_reg-1)*123+2,SEEK_CUR);
 							i = 0;
 							fscanf(fp,"%c",&c);
 							do{
@@ -206,7 +206,7 @@ int main(int argc, char const *argv[])
 						} else if (i ==1){
 							for(j=strlen(aux);j<22;j++) fprintf(fp,"%s"," ");
 						} else{
-							for(j=strlen(aux);j<25;j++)fprintf(fp,"%s"," ");
+							for(j=strlen(aux);j<25;j++) fprintf(fp,"%s"," ");
 						} 
 						i++;
 					}while(i<3);

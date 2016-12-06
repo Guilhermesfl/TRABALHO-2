@@ -110,6 +110,7 @@ arvB* insere_arvB(arvB *T, char *k, int *posicao, int* regulador)
 {
 	no *r;
 	int vef = 0;
+	int nivel = 0;
 	r = T->raiz;
 	if(r->num == 4){
 		no *s;
@@ -119,16 +120,16 @@ arvB* insere_arvB(arvB *T, char *k, int *posicao, int* regulador)
 		s->num = 0;
 		s->filhos[0] = r;
 		split_filho_arvB(s,0,regulador); //Para a raiz
-		s = insereNC_arvB(s,k,posicao,regulador);
+		s = insereNC_arvB(s,k,posicao,regulador,&nivel);
 		*regulador = *regulador +1;
 		s->pagina = *regulador;
 	} else {
-		r = insereNC_arvB(r,k,posicao,regulador);
+		r = insereNC_arvB(r,k,posicao,regulador,&nivel);
 	}
 	return T;
 }
 /* FUNÇÃO DE INSERÇÃO DE CHAVE QUANDO O NÓ NÃO ESTÁ CHEIO */
-no* insereNC_arvB(no* x, char *k, int *posicao, int* regulador)
+no* insereNC_arvB(no* x, char *k, int *posicao, int* regulador, int * nivel)
 {
 	char *aux;
 	int i;
@@ -153,6 +154,7 @@ no* insereNC_arvB(no* x, char *k, int *posicao, int* regulador)
 			x->chaves[i] = aux;
 			x->num++;
 		}
+		x->nivel = *nivel;
 	} 
 	else
 	{
@@ -162,7 +164,8 @@ no* insereNC_arvB(no* x, char *k, int *posicao, int* regulador)
 			split_filho_arvB(x,i,regulador); //Para nó folha
 			if(strcmp(aux,x->chaves[i])>0) i++; 
 		}
-		insereNC_arvB(x->filhos[i],aux,posicao,regulador);
+		*nivel = *nivel + 1;
+		insereNC_arvB(x->filhos[i],aux,posicao,regulador,nivel);
 	}
 
 	return x;
@@ -221,7 +224,7 @@ void imprime_arvB(no*x)
 void imprime(no *x)
 {
 	int j = 0,k,i = 0;;
-	printf("N%d:", j);
+	printf("N%d:", x->nivel);
 	printf("\n");
 	printf("P%d:", x->pagina);
 

@@ -13,6 +13,7 @@ struct Bno{
 	no* filhos[5];
 	int cor;
 	no *prox;
+	int nivel;
 };
 
 struct Registro1 {
@@ -38,7 +39,7 @@ arvB* cria_arvB(arvB *T);
 no* cria_no(no *x);
 arvB* insere_arvB(arvB *T, char *k, int *posicao, int* regulador);
 void split_filho_arvB(no* x, int i, int* regulador);
-no* insereNC_arvB(no* x, char *k, int *posicao, int* regulador);
+no* insereNC_arvB(no* x, char *k, int *posicao, int* regulador, int *nivel);
 int busca_arvB(no *x, char *k, int* seeks);
 void imprime(no *x);
 void imprime_arvB(no*x);

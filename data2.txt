@@ -7,7 +7,7 @@ ID06 Tales of the Heroes: Twin Brave                                      Februa
 ID07 Nendoroid Generations                                                February 23, 2012     Namco Bandai Games       
 ID08 Kurohyou 2: Ryu ga Gotoku Asyura hen                                 March 22, 2012        syn Sophia               
 ID09 Shining Blade                                                        March 15, 2012        Sega                     
-ID11 Genso Suikoden: Tsumugareshi Hyakunen no Toki                        February 9, 2012      Konami                   
+ID10 Genso Suikoden: Tsumugareshi Hyakunen no Toki                        February 9, 2012      Konami                   
 ID11 Kidou Senshi Gundam: Mokuba no Kiseki                                January 26, 2012      Namco Bandai Games       
 ID12 Magical Girl Lyrical Nanoha A's Portable: The Gears of Destiny       December 22, 2011     Namco Bandai Games       
 ID13 Frontier Gate                                                        December 22, 2011     tri-Ace                  
@@ -40,8 +40,10 @@ ID39 Defenders of Ardania                                                 March 
 ID40 Shoot Many Robots                                                    March 14, 2012        Demiurge Studios         
 ID41 I Am Alive                                                           March 7, 2012         Ubisoft                  
 ID42 Nexuiz                                                               February 29, 2012     Illfonic                 
-ID43 Alan Wake's American Nightmare                                       February 22, 2012     Remedy Entertainment      
+ID43 Alan Wake's American Nightmare                                       February 22, 2012     Remedy Entertainment     
 ID44 Warp                                                                 February 15, 2012     trapdoor                 
 ID45 Gotham City Impostors                                                February 8, 2012      Monolith Productions     
 ID46 Shank 2	                                                          February 8, 2012      Klei Entertainment       
 ID47 The Simpsons Arcade Game                                             February 3, 2012      Konami                   
+ID48 ASNDKASNDK                                                           ASDMLASDSA            WQOEJQWEQW               
+ID49 AKNDASKNDKASND                                                       QWOEQWEKQWOEK         ASDLMASDLAMS             
