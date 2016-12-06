@@ -76,6 +76,7 @@ void split_filho_arvB(no* x, int i, int* regulador)
 
 	*regulador = *regulador +1;
 	z->pagina = *regulador;
+	z->nivel = y->nivel;
 
 	for (int j = 0; j < 1; ++j) z->chaves[j] = y->chaves[j+3];
 	for (int j = 0; j < 1; ++j) z->posicao[j] = y->posicao[j+3];
@@ -119,6 +120,7 @@ arvB* insere_arvB(arvB *T, char *k, int *posicao, int* regulador)
 		s->folha = FALSE;
 		s->num = 0;
 		s->filhos[0] = r;
+		r->nivel = 1;
 		split_filho_arvB(s,0,regulador); //Para a raiz
 		s = insereNC_arvB(s,k,posicao,regulador,&nivel);
 		*regulador = *regulador +1;
@@ -129,7 +131,7 @@ arvB* insere_arvB(arvB *T, char *k, int *posicao, int* regulador)
 	return T;
 }
 /* FUNÇÃO DE INSERÇÃO DE CHAVE QUANDO O NÓ NÃO ESTÁ CHEIO */
-no* insereNC_arvB(no* x, char *k, int *posicao, int* regulador, int * nivel)
+no* insereNC_arvB(no* x, char *k, int *posicao, int* regulador, int *nivel)
 {
 	char *aux;
 	int i;

@@ -180,9 +180,9 @@ int main(int argc, char const *argv[])
 					}while(i<9);
 					rewind(fp);
 					fclose(fp);
-				} else {
+				}else {
 					fp = fopen("data2.txt", "a");
-					fputs("\n", fp);
+					aux = (char *)malloc(4*sizeof(char));	
 					printf("Digite as informacoes do registro\n");
 					printf("Digite a chave primaria:");
 					scanf("%s", aux);
@@ -196,25 +196,31 @@ int main(int argc, char const *argv[])
 					insere_arvB(T,aux,&NRR,&regulador);
 					fprintf(fp,"%s ",aux);
 					i = 0;
-					do{
-						printf("%s", reg2->campos[i]);
-						scanf("%[^\n]s", aux);
-						getchar();
-						fprintf(fp,"%s", aux);
-						if(i==0){
-							for(j=strlen(aux);j<69;j++) fprintf(fp,"%s"," ");
-						} else if (i ==1){
-							for(j=strlen(aux);j<22;j++) fprintf(fp,"%s"," ");
-						} else{
-							for(j=strlen(aux);j<25;j++) fprintf(fp,"%s"," ");
-						} 
-						i++;
-					}while(i<3);
+					printf("Nome: ");
+					aux = (char*)realloc(aux,69*sizeof(char));
+					scanf("%[^\n]s", aux);
+					getchar();
+					fprintf(fp,"%s", aux);
+					for(j=strlen(aux);j<69;j++) fprintf(fp,"%s"," ");
+					printf("Data: ");
+					aux = (char*)realloc(aux,22*sizeof(char));
+					scanf("%[^\n]s", aux);
+					getchar();
+					fprintf(fp,"%s", aux);
+					for(j=strlen(aux);j<22;j++) fprintf(fp,"%s"," ");
+					printf("Empresa: ");
+					aux = (char*)realloc(aux,25*sizeof(char));
+					scanf("%[^\n]s", aux);
+					getchar();
+					fprintf(fp,"%s", aux);
+					for(j=strlen(aux);j<25;j++) fprintf(fp,"%s"," ");
+					fputs("\n",fp);
+
 					rewind(fp);
 					fclose(fp);
-				}	
+					free(aux);
+				}
 				break;
-
 			case 3:
 				imprime_arvB(T->raiz);
 				break;
